@@ -11,7 +11,7 @@ class Client(object):
 	_header = None
 
 	def __init__(self, host, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
-		self._conn = httplib.HTTPConnection(host, timeout)
+		self._conn = httplib.HTTPConnection(host, timeout=timeout)
 		self._header = {}
 
 	def round_tripper(self, method, path, body):
