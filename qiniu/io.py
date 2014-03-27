@@ -4,6 +4,7 @@ import rpc
 import conf
 import random
 import string
+import socket
 try:
 	import zlib as binascii
 except ImportError:
@@ -19,7 +20,7 @@ class PutExtra(object):
 # @endgist
 
 
-def put(uptoken, key, data, extra=None):
+def put(uptoken, key, data, extra=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
 	""" put your data to Qiniu
 
 	If key is None, the server will generate one.
@@ -51,7 +52,7 @@ def put(uptoken, key, data, extra=None):
 	files = [
 		{'filename': fname, 'data': data, 'mime_type': extra.mime_type},
 	]
-	return rpc.Client(conf.UP_HOST).call_with_multipart("/", fields, files)
+	return rpc.Client(conf.UP_HOST, timeout=timeout).call_with_multipart("/", fields, files)
 
 
 def put_file(uptoken, key, localfile, extra=None):

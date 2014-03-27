@@ -3,14 +3,15 @@ import httplib_chunk as httplib
 import json
 import cStringIO
 import conf
+import socket
 
 
 class Client(object):
 	_conn = None
 	_header = None
 
-	def __init__(self, host):
-		self._conn = httplib.HTTPConnection(host)
+	def __init__(self, host, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
+		self._conn = httplib.HTTPConnection(host, timeout)
 		self._header = {}
 
 	def round_tripper(self, method, path, body):
@@ -112,7 +113,7 @@ class Client(object):
 			disposition = "Content-Disposition: form-data;"
 			filename = _qiniu_escape(file_info.get('filename'))
 			L.append('%s name="file"; filename="%s"' % (disposition, filename))
-			L.append('Content-Type: %s' % file_info.get('content_type', 'application/octet-stream'))
+			L.append('Content-Type: %s' % file_info.get('mime_type', 'application/octet-stream'))
 			L.append('')
 			L.append('')
 			b2 = CRLF.join(L)
